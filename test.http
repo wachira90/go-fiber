@@ -35,6 +35,20 @@ Content-Type: application/json
   "rating": 3
 }
 
-### 
+### update 
+PUT http://localhost:3000/books/1
+Content-Type: application/json
+
+{
+  "title": "7 The Catcher in the Rye (Updated)",
+  "author": "7 J.D. Salinger",
+  "rating": 7
+}
+
+### delete 
+DELETE http://localhost:3000/books/1
+
+
+### get by ID
 GET http://localhost:3000/books/2
 
