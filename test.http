@@ -2,13 +2,39 @@
 
 GET http://localhost:3000/books
 
-###
+### add 1
 
 POST http://localhost:3000/books
 Content-Type: application/json
 
 {
-  "title": "6The Great Gatsby",
-  "author": "6F. Scott Fitzgerald",
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "rating": 5
+}
+
+### add 2
+
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+  "title": "6 The Great Gatsby",
+  "author": "6 F. Scott Fitzgerald",
   "rating": 6
 }
+
+### add 3
+
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+  "title": "3 The Great Gatsby",
+  "author": "3 F. Scott Fitzgerald",
+  "rating": 3
+}
+
+### 
+GET http://localhost:3000/books/2
+
