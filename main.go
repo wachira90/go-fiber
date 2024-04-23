@@ -1,35 +1,69 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-func main() {
-	fmt.Println("hello world")
+// Book struct represents a book model
+type Book struct {
+	gorm.Model
+	Title  string `json:"title"`
+	Author string `json:"author"`
+	Rating int    `json:"rating"`
+}
 
-	// fiber instance
+var DB *gorm.DB
+
+func main() {
+	// Connect to PostgreSQL database
+	dsn := "host=192.168.1.15 user=postgres password=postgres dbname=testgo port=5432 TimeZone=Asia/Bangkok sslmode=disable"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalln(err)
+	}
+	DB = db
+
+	// Migrate the Book model
+	DB.AutoMigrate(&Book{})
+
+	// Create a new Fiber instance
 	app := fiber.New()
 
-	// routes
-	//  app.Get("/", func(c *fiber.Ctx) error {
-	//   return c.SendString("hello world 🌈")
-	//  })
+	// API routes
+	app.Get("/books", getAllBooks)
+	app.Post("/books", createBook)
 
-	app.Get("/", func(c *fiber.Ctx) error { // STRING
-		return c.SendString("hello world 🌈")
-	})
+	// Start the server
+	log.Fatal(app.Listen(":3000"))
+}
 
-	app.Get("/info", func(c *fiber.Ctx) error { // JSON
-		return c.JSON(fiber.Map{
-			"msg":     "hello world 🚀",
-			"go":      "fiber 🥦",
-			"boolean": true,
-			"number":  1234,
+// getAllBooks handler retrieves all books from the database
+func getAllBooks(c *fiber.Ctx) error {
+	var books []Book
+	DB.Find(&books)
+	return c.JSON(books)
+}
+
+// createBook handler creates a new book in the database
+func createBook(c *fiber.Ctx) error {
+	book := new(Book)
+	if err := c.BodyParser(book); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
 		})
-	})
+	}
 
-	// app listening at PORT: 3000
-	app.Listen(":3000")
+	if err := DB.Create(book).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	return c.JSON(book)
 }
