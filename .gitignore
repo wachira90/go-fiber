@@ -1,1 +1,4 @@
 db/data/*
+!db/data/pg_hba.conf
+!db/data/pg_ident.conf
+!db/data/postgresql.conf
