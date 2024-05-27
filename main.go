@@ -42,7 +42,7 @@ func main() {
 	app.Delete("/books/:id", deleteBook)
 
 	// Start the server
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(":8080"))
 }
 
 // getAllBooks handler retrieves all books from the database

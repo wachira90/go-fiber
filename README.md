@@ -1,11 +1,11 @@
 # golang fiber
 
-
 ## run 
 
-```
+```sh
 go run main.go
 ```
+
 ## Test data
 
 - Create a new book:
@@ -38,10 +38,9 @@ go run main.go
   DELETE http://localhost:3000/books/1
   ```
 
-
 ## build 
 
-```
+```sh
 go build -o main.exe main.go
 
 ```
